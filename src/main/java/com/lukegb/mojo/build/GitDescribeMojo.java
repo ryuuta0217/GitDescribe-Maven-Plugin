@@ -153,7 +153,7 @@ public class GitDescribeMojo
         // scmDirectory
         String line = commandExecutor(buildDescribeCommand());
         if (line == null) {
-            String commandtwo[] = {"git","log","--pretty=format:\"%h\""};
+            String commandtwo[] = {"git","log","--pretty=format:%h"};
             line = commandExecutor(commandtwo);
             if (line == null) {
                 line = failOutput;
