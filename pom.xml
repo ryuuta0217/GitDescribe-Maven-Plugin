@@ -7,7 +7,7 @@
   <artifactId>gitdescribe-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>Git Describe Maven Plugin</name>
-  <version>3.1-SNAPSHOT</version>
+  <version>3.1.1-SNAPSHOT</version>
   <url>https://github.com/lukegb/GitDescribe-Maven-Plugin/</url>
 
   <inceptionYear>2011</inceptionYear>
@@ -21,14 +21,14 @@
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
-  
-  
+
+
   <description>
      This plugin is designed to give you a build number. So when you might make 100 builds of version
      1.0-SNAPSHOT, you can differentiate between them all. It does this by taking the output of git describe
      and saving it into a Maven build variable, so you can reference the value in your POM.
   </description>
-  
+
   <licenses>
     <license>
       <name>The MIT License</name>
@@ -36,7 +36,7 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
+
   <developers>
     <developer>
       <id>lukegb</id>
@@ -49,11 +49,25 @@
     </developer>
   </developers>
 
-    
   <properties>
+    <!-- 文字コード -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- コードと生成クラスのバージョン情報 -->
+    <java.version>1.8</java.version>
+    <!-- 認証情報を読み込む（settings.xml） -->
+    <github.global.server>github</github.global.server>
     <maven.scm.version>1.2</maven.scm.version>
     <maven.api.version>2.0.6</maven.api.version>
   </properties>
+
+  <!-- Local の target/mvn-repo フォルダをリポジトリとして宣言 -->
+  <distributionManagement>
+    <repository>
+      <id>internal.repos</id>
+      <name>Sample Maven Repository</name>
+      <url>file://${project.build.directory}/mvn-repo</url>
+    </repository>
+  </distributionManagement>
 
   <dependencies>
     <dependency>
@@ -70,7 +84,7 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <version>${maven.api.version}</version>
-    </dependency>    
+    </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
@@ -89,7 +103,6 @@
   </dependencies>
 
   <build>
-  
     <pluginManagement>
       <plugins>
         <plugin>
@@ -117,10 +130,8 @@
               <goal>package</goal>
             </goals>
             <settingsFile>src/it/settings.xml</settingsFile>
-             
             <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
             <cloneAllFiles>true</cloneAllFiles>
-            
           </configuration>
           <executions>
             <execution>
@@ -131,10 +142,10 @@
               </goals>
             </execution>
           </executions>
-        </plugin>        
+        </plugin>
       </plugins>
     </pluginManagement>
-    
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -154,9 +165,36 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.12</version>
+        <configuration>
+          <!-- Git commit message -->
+          <message>Maven artifacts for ${project.version}</message>
+          <noJekyll>true</noJekyll>
+          <!-- distributionManagement の url と一致させる -->
+          <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+          <branch>refs/heads/mvn-repo</branch>
+          <includes>
+            <include>**/*</include>
+          </includes>
+          <!-- Github リポジトリ名 -->
+          <repositoryName>GitDescribe-Maven-Plugin</repositoryName>
+          <repositoryOwner>ryuuta0217</repositoryOwner>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>deploy</phase>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
-  
+
   <profiles>
     <profile>
       <id>run-its</id>
@@ -165,12 +203,12 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-          </plugin>  
+          </plugin>
         </plugins>
       </build>
     </profile>
   </profiles>
-  
+
   <reporting>
     <plugins>
       <plugin>
@@ -189,9 +227,8 @@
   </reporting>
 
   <scm>
-    <url>https://github.com/lukegb/GitDescribe-Maven-Plugin</url>
-    <connection>scm:git:https://github.com/lukegb/GitDescribe-Maven-Plugin.git</connection>
-    <developerConnection>scm:git:https://github.com/lukegb/GitDescribe-Maven-Plugin.git</developerConnection>
+    <url>https://github.com/ryuuta0217/GitDescribe-Maven-Plugin</url>
+    <connection>scm:git:https://github.com/ryuuta0217/GitDescribe-Maven-Plugin.git</connection>
+    <developerConnection>scm:git:https://github.com/ryuuta0217/GitDescribe-Maven-Plugin.git</developerConnection>
   </scm>
-  
 </project>
