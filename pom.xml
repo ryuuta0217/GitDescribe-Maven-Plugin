@@ -16,13 +16,6 @@
     <maven>2.0.6</maven>
   </prerequisites>
 
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>7</version>
-  </parent>
-
-
   <description>
      This plugin is designed to give you a build number. So when you might make 100 builds of version
      1.0-SNAPSHOT, you can differentiate between them all. It does this by taking the output of git describe
